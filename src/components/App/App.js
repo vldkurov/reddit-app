@@ -2,8 +2,9 @@ import React, {Suspense} from 'react';
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from 'react-router-dom';
 import './App.css';
 import Root from "../Root/Root";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
-const Home = React.lazy(() => import('../../views/Home/Home'));
+const Home = React.lazy(() => import(/* webpackChunkName: "home" */ '../../views/Home/Home'));
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -16,9 +17,11 @@ const router = createBrowserRouter(createRoutesFromElements(
 function App() {
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
-                <RouterProvider router={router}/>
-            </Suspense>
+            <ErrorBoundary>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <RouterProvider router={router}/>
+                </Suspense>
+            </ErrorBoundary>
         </>
     )
 }
