@@ -1,7 +1,7 @@
 function FilterOptions() {
     return (
         <div>
-            {/* code goes here */}
+            <h2>Filter Options</h2>
         </div>
     );
 }
