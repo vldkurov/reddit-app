@@ -1,10 +1,12 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Comment from "../Comment/Comment";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import {fetchComments} from "../../features/redditSlice";
 
 export function CommentsComponent({subreddit, postId}) {
+    const dispatch = useDispatch();
     const commentsStatus = useSelector(state => state.reddit.commentsStatus);
     const error = useSelector(state => state.reddit.error);
     const activePosts = useSelector(state => state.reddit.activePosts);
@@ -16,6 +18,17 @@ export function CommentsComponent({subreddit, postId}) {
     // Sort comments by 'created_utc' in descending order (newest first)
     const sortedComments = comments ? comments.slice().sort((a, b) => b.created_utc - a.created_utc) : [];
 
+    // useEffect(() => {
+    //     if (isActive && commentsStatus === 'idle') {
+    //         dispatch(fetchComments({subreddit, postId}));
+    //     }
+    // }, [subreddit, postId, commentsStatus, dispatch, isActive]);
+
+    useEffect(() => {
+        if (isActive && commentsStatus === 'idle') {
+            dispatch(fetchComments({postId, subreddit}));
+        }
+    }, [postId, subreddit, commentsStatus, dispatch, isActive]);
 
     if (!isActive) {
         return null; // Don't render anything if the post is not active

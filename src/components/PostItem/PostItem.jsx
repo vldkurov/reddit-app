@@ -14,11 +14,12 @@ import {decreaseScore, fetchComments, increaseScore, togglePostActive} from "../
 import Box from "@mui/material/Box";
 
 
-export function MultiActionAreaCard({post, sub}) {
-    const {id, title, author, created_utc, num_comments, score} = post
+export function MultiActionAreaCard({post}) {
+    const {id, title, author, created_utc, num_comments, score, subreddit} = post
 
     const dispatch = useDispatch();
     const activePosts = useSelector(state => state.reddit.activePosts);
+    const userAction = useSelector(state => state.reddit.userActions[post.id]);
     const isActive = !!activePosts[id]; // Check if this specific post is active
 
     const hoursAgo = getHoursAgo(created_utc);
@@ -28,16 +29,20 @@ export function MultiActionAreaCard({post, sub}) {
     const displayScore = formatScore(score + modifiedScore);
 
     const handleIncreaseScore = () => {
-        dispatch(increaseScore(id));
+        if (userAction !== 'increased') {
+            dispatch(increaseScore(post.id));
+        }
     };
 
     const handleDecreaseScore = () => {
-        dispatch(decreaseScore(id));
+        if (userAction !== 'decreased') {
+            dispatch(decreaseScore(post.id));
+        }
     };
 
     const handleIconClick = () => {
         if (!isActive) {
-            dispatch(fetchComments({subreddit: sub, postId: id}));
+            dispatch(fetchComments({subreddit: subreddit, postId: id}));
         }
         dispatch(togglePostActive(id));
     };
@@ -48,19 +53,44 @@ export function MultiActionAreaCard({post, sub}) {
                 <Grid container columnSpacing={1}>
                     <Grid item xs="auto" sx={{}}>
                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <ArrowUpwardIcon onClick={handleIncreaseScore} sx={{
-                                cursor: 'pointer',
-                                '&:hover': {
-                                    color: 'green',
-                                },
-                            }}/>
+                            <Box disabled={userAction === 'increased'}>
+                                <ArrowUpwardIcon
+                                    onClick={handleIncreaseScore}
+                                    // style={{ color: userAction === 'increased' ? 'grey' : 'inherit' }}
+                                    sx={{
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            color: 'green',
+                                        },
+                                        color: userAction === 'increased' ? 'grey' : 'inherit'
+                                    }}
+                                />
+                            </Box>
+                            {/*<ArrowUpwardIcon onClick={handleIncreaseScore} sx={{*/}
+                            {/*    cursor: 'pointer',*/}
+                            {/*    '&:hover': {*/}
+                            {/*        color: 'green',*/}
+                            {/*    },*/}
+                            {/*}}/>*/}
                             <Typography component="div">{displayScore}</Typography>
-                            <ArrowDownwardIcon onClick={handleDecreaseScore} sx={{
-                                cursor: 'pointer',
-                                '&:hover': {
-                                    color: 'red',
-                                },
-                            }}/>
+                            <Box disabled={userAction === 'decreased'}>
+                                <ArrowDownwardIcon
+                                    onClick={handleDecreaseScore}
+                                    sx={{
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            color: 'red',
+                                        },
+                                        color: userAction === 'decreased' ? 'grey' : 'inherit'
+                                    }}
+                                />
+                            </Box>
+                            {/*<ArrowDownwardIcon onClick={handleDecreaseScore} sx={{*/}
+                            {/*    cursor: 'pointer',*/}
+                            {/*    '&:hover': {*/}
+                            {/*        color: 'red',*/}
+                            {/*    },*/}
+                            {/*}}/>*/}
                         </Box>
                     </Grid>
                     <Grid item xs sx={{}}>
@@ -90,7 +120,7 @@ export function MultiActionAreaCard({post, sub}) {
 
                             </CardContent>
                         </CardActionArea>
-                        {isActive && <DetailedPostView subreddit={sub} postId={id}/>}
+                        {isActive && <DetailedPostView postId={id} subreddit={subreddit}/>}
                         <CardActions>
                             <Button size="small" color="primary">
                                 Share

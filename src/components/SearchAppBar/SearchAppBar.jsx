@@ -7,8 +7,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import RedditIcon from '@mui/icons-material/Reddit';
 import {useDispatch} from "react-redux";
 import {fetchPosts} from "../../features/redditSlice";
+import {IconButton} from "@mui/material";
 
 const logo = 'RedditMinimal'
 
@@ -59,8 +61,8 @@ export default function SearchAppBar() {
     const dispatch = useDispatch();
 
     const handleSearch = (e) => {
-        e.preventDefault(); // Prevent default form submission
-        dispatch(fetchPosts({subreddit: 'all', searchTerm: input}));
+        e.preventDefault();
+        dispatch(fetchPosts({searchTerm: input})); // No subreddit needed
         setInput('')
     };
 
@@ -69,15 +71,16 @@ export default function SearchAppBar() {
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    {/*<IconButton*/}
-                    {/*    size="large"*/}
-                    {/*    edge="start"*/}
-                    {/*    color="inherit"*/}
-                    {/*    aria-label="open drawer"*/}
-                    {/*    sx={{mr: 2}}*/}
-                    {/*>*/}
-                    {/*    <MenuIcon/>*/}
-                    {/*</IconButton>*/}
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        sx={{mr: 0.5}}
+                    >
+                        {/*<MenuIcon/>*/}
+                        <RedditIcon color="white" fontSize="large"/>
+                    </IconButton>
                     <Typography
                         variant="h6"
                         noWrap
