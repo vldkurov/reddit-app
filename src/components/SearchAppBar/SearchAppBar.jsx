@@ -58,11 +58,10 @@ export default function SearchAppBar() {
     const [input, setInput] = useState('');
     const dispatch = useDispatch();
 
-    console.log('input', input);
-
     const handleSearch = (e) => {
         e.preventDefault(); // Prevent default form submission
         dispatch(fetchPosts({subreddit: 'all', searchTerm: input}));
+        setInput('')
     };
 
 
