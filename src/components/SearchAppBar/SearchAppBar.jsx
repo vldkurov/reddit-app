@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {alpha, styled} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -6,6 +7,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import {useDispatch} from "react-redux";
+import {fetchPosts} from "../../features/redditSlice";
 
 const logo = 'RedditMinimal'
 
@@ -52,6 +55,17 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 export default function SearchAppBar() {
+    const [input, setInput] = useState('');
+    const dispatch = useDispatch();
+
+    console.log('input', input);
+
+    const handleSearch = (e) => {
+        e.preventDefault(); // Prevent default form submission
+        dispatch(fetchPosts({subreddit: 'all', searchTerm: input}));
+    };
+
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
@@ -73,17 +87,22 @@ export default function SearchAppBar() {
                     >
                         {logo}
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon/>
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{'aria-label': 'search'}}
-                        />
-                    </Search>
+                    <Box component="form" onSubmit={handleSearch} noValidate>
+                        <Search type="submit" aria-label="search">
+                            <SearchIconWrapper>
+                                <SearchIcon/>
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{'aria-label': 'search'}}
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                            />
+                        </Search>
+                    </Box>
                 </Toolbar>
             </AppBar>
         </Box>
     );
 }
+
