@@ -13,16 +13,14 @@ export function BasicList() {
     const error = useSelector(state => state.reddit.error);
 
 
-    // useEffect(() => {
-    //     dispatch(fetchPosts(selectedSubreddit));
-    // }, [selectedSubreddit, dispatch]);
-
     // In PostList.jsx
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchPosts({subreddit: selectedSubreddit, searchTerm: ''}));
         }
     }, [selectedSubreddit, status, dispatch]);
+
+    const sortedPosts = posts ? posts.slice().sort((a, b) => b.created_utc - a.created_utc) : [];
 
 
     // Render posts or loading/error state based on status
@@ -38,11 +36,10 @@ export function BasicList() {
             bgcolor: 'background.paper'
         }}>
             <List>
-                {posts.map(post => (
+                {sortedPosts.map(post => (
                     <PostItem
                         key={post.id}
                         post={post}
-                        sub={selectedSubreddit}
                     />
                 ))}
             </List>

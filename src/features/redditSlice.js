@@ -1,25 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// ${subreddit}
-
-// Async thunk for fetching posts from Reddit
-// export const fetchPosts = createAsyncThunk(
-//     'reddit/fetchPosts',
-//     async (subreddit, {rejectWithValue}) => {
-//         try {
-//             const response = await axios.get(`https://www.reddit.com/r/${subreddit}.json`, {
-//                 params: {
-//                     raw_json: 1
-//                 }
-//             });
-//             return response.data.data.children.map(post => post.data);
-//         } catch (error) {
-//             return rejectWithValue(error.response.data);
-//         }
-//     }
-// );
-
 export const fetchPosts = createAsyncThunk(
     'reddit/fetchPosts',
     async ({subreddit, searchTerm}, {rejectWithValue}) => {
@@ -28,36 +9,37 @@ export const fetchPosts = createAsyncThunk(
             const params = {raw_json: 1};
 
             if (searchTerm) {
-                // If there is a search term, search across all of Reddit
                 params.q = searchTerm;
                 url = 'https://www.reddit.com/search.json';
             } else {
-                // If no search term, fetch posts from the specified subreddit
                 url = `https://www.reddit.com/r/${subreddit}.json`;
             }
 
             const response = await axios.get(url, {params});
-            return response.data.data.children.map(post => post.data);
+            return response.data.data.children
+                .map(post => ({
+                    ...post.data,
+                    subreddit: post.data.subreddit || subreddit // Ensure subreddit is included
+                }))
+                .filter(post => !post.over_18);  // Exclude posts marked as 18+
         } catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
 );
 
-
 export const fetchComments = createAsyncThunk(
     'reddit/fetchComments',
-    async ({subreddit, postId}, {rejectWithValue}) => {
+    async ({postId, subreddit}, {rejectWithValue}) => {
         try {
             const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${postId}.json`);
-            const json = await response.json();
-            // Assuming the comments are in the second array element
-            return json[1]?.data?.children.map(child => child.data);
+            return response.json().then(json => json[1]?.data?.children.map(child => child.data));
         } catch (error) {
             return rejectWithValue(error.message);
         }
     }
 );
+
 
 const redditSlice = createSlice({
     name: 'reddit',
@@ -71,7 +53,7 @@ const redditSlice = createSlice({
         activePosts: {},
         scores: {},
         selectedSubreddit: 'Home', // Default subreddit
-        searchTerm: '',
+        userActions: {},
     },
     reducers: {
         // standard reducer logic
@@ -87,6 +69,8 @@ const redditSlice = createSlice({
             } else {
                 state.scores[postId] += 1;
             }
+            // Mark that the user has increased the score for this post
+            state.userActions[action.payload] = 'increased';
         },
         decreaseScore: (state, action) => {
             const postId = action.payload;
@@ -95,12 +79,11 @@ const redditSlice = createSlice({
             } else {
                 state.scores[postId] -= 1;
             }
+            // Mark that the user has decreased the score for this post
+            state.userActions[action.payload] = 'decreased';
         },
         setSelectedSubreddit: (state, action) => {
             state.selectedSubreddit = action.payload;
-        },
-        setSearchTerm: (state, action) => {
-            state.searchTerm = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -141,6 +124,5 @@ export const {
     increaseScore,
     decreaseScore,
     setSelectedSubreddit,
-    setSearchTerm
 } = redditSlice.actions;
 

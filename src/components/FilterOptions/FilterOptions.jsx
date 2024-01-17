@@ -15,7 +15,7 @@ export default function FilterOptions() {
 
 
     return (
-        <Select defaultValue="Home" onChange={handleSubredditChange}>
+        <Select defaultValue="Home" onChange={handleSubredditChange} sx={{width: 1}}>
             {predefinedSubreddits.map(subreddit => (
                 <MenuItem key={subreddit} value={subreddit}>{subreddit}</MenuItem>
             ))}
