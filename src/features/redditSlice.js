@@ -4,21 +4,46 @@ import axios from 'axios';
 // ${subreddit}
 
 // Async thunk for fetching posts from Reddit
+// export const fetchPosts = createAsyncThunk(
+//     'reddit/fetchPosts',
+//     async (subreddit, {rejectWithValue}) => {
+//         try {
+//             const response = await axios.get(`https://www.reddit.com/r/${subreddit}.json`, {
+//                 params: {
+//                     raw_json: 1
+//                 }
+//             });
+//             return response.data.data.children.map(post => post.data);
+//         } catch (error) {
+//             return rejectWithValue(error.response.data);
+//         }
+//     }
+// );
+
 export const fetchPosts = createAsyncThunk(
     'reddit/fetchPosts',
-    async (subreddit, {rejectWithValue}) => {
+    async ({subreddit, searchTerm}, {rejectWithValue}) => {
         try {
-            const response = await axios.get(`https://www.reddit.com/r/${subreddit}.json`, {
-                params: {
-                    raw_json: 1
-                }
-            });
+            let url;
+            const params = {raw_json: 1};
+
+            if (searchTerm) {
+                // If there is a search term, search across all of Reddit
+                params.q = searchTerm;
+                url = 'https://www.reddit.com/search.json';
+            } else {
+                // If no search term, fetch posts from the specified subreddit
+                url = `https://www.reddit.com/r/${subreddit}.json`;
+            }
+
+            const response = await axios.get(url, {params});
             return response.data.data.children.map(post => post.data);
         } catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
 );
+
 
 export const fetchComments = createAsyncThunk(
     'reddit/fetchComments',
@@ -39,10 +64,14 @@ const redditSlice = createSlice({
     initialState: {
         posts: [],
         comments: [],
+        commentsByPostId: {},
         status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
         commentsStatus: 'idle', // Similar status for comments
         error: null,
         activePosts: {},
+        scores: {},
+        selectedSubreddit: 'Home', // Default subreddit
+        searchTerm: '',
     },
     reducers: {
         // standard reducer logic
@@ -50,6 +79,28 @@ const redditSlice = createSlice({
             const postId = action.payload;
             // Toggle the active state for the specific post
             state.activePosts[postId] = !state.activePosts[postId];
+        },
+        increaseScore: (state, action) => {
+            const postId = action.payload;
+            if (state.scores[postId] === undefined) {
+                state.scores[postId] = 1;
+            } else {
+                state.scores[postId] += 1;
+            }
+        },
+        decreaseScore: (state, action) => {
+            const postId = action.payload;
+            if (state.scores[postId] === undefined) {
+                state.scores[postId] = -1;
+            } else {
+                state.scores[postId] -= 1;
+            }
+        },
+        setSelectedSubreddit: (state, action) => {
+            state.selectedSubreddit = action.payload;
+        },
+        setSearchTerm: (state, action) => {
+            state.searchTerm = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -73,8 +124,9 @@ const redditSlice = createSlice({
                 state.commentsStatus = 'loading';
             })
             .addCase(fetchComments.fulfilled, (state, action) => {
+                const {postId} = action.meta.arg;
                 state.commentsStatus = 'succeeded';
-                state.comments = action.payload;
+                state.commentsByPostId[postId] = action.payload;
             })
             .addCase(fetchComments.rejected, (state, action) => {
                 state.commentsStatus = 'failed';
@@ -84,5 +136,11 @@ const redditSlice = createSlice({
 });
 
 export default redditSlice.reducer;
-export const {togglePostActive} = redditSlice.actions;
+export const {
+    togglePostActive,
+    increaseScore,
+    decreaseScore,
+    setSelectedSubreddit,
+    setSearchTerm
+} = redditSlice.actions;
 

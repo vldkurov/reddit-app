@@ -1,26 +1,20 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchComments} from '../../features/redditSlice';
+import React from 'react';
+import {useSelector} from 'react-redux';
 import Comment from "../Comment/Comment";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
 
 export function CommentsComponent({subreddit, postId}) {
-    const dispatch = useDispatch();
-    const comments = useSelector(state => state.reddit.comments);
     const commentsStatus = useSelector(state => state.reddit.commentsStatus);
     const error = useSelector(state => state.reddit.error);
     const activePosts = useSelector(state => state.reddit.activePosts);
+    const comments = useSelector(state => state.reddit.commentsByPostId[postId]);
+
 
     const isActive = !!activePosts[postId];
 
-    useEffect(() => {
-        // Fetch comments only if the post is active and comments have not been loaded
-        if (isActive && commentsStatus === 'idle') {
-            dispatch(fetchComments({subreddit, postId}));
-        }
-    }, [subreddit, postId, commentsStatus, dispatch, isActive]);
-
     // Sort comments by 'created_utc' in descending order (newest first)
-    const sortedComments = comments.slice().sort((a, b) => b.created_utc - a.created_utc);
+    const sortedComments = comments ? comments.slice().sort((a, b) => b.created_utc - a.created_utc) : [];
 
 
     if (!isActive) {
@@ -36,9 +30,16 @@ export function CommentsComponent({subreddit, postId}) {
 
     return (
         <>
-            {sortedComments.map(comment => (
-                <Comment key={comment.id} comment={comment}/>
-            ))}
+            <Box sx={{
+                width: '100%',
+                bgcolor: 'background.paper'
+            }}>
+                <List>
+                    {sortedComments.map(comment => (
+                        <Comment key={comment.id} comment={comment}/>
+                    ))}
+                </List>
+            </Box>
         </>
     );
 }

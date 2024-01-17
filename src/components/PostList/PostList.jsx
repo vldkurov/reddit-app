@@ -6,19 +6,24 @@ import {fetchPosts} from '../../features/redditSlice';
 import {MultiActionAreaCard as PostItem} from "../PostItem/PostItem";
 
 export function BasicList() {
-
     const dispatch = useDispatch();
+    const selectedSubreddit = useSelector(state => state.reddit.selectedSubreddit);
     const posts = useSelector(state => state.reddit.posts);
     const status = useSelector(state => state.reddit.status);
     const error = useSelector(state => state.reddit.error);
 
-    const searchParam = 'pics'
 
+    // useEffect(() => {
+    //     dispatch(fetchPosts(selectedSubreddit));
+    // }, [selectedSubreddit, dispatch]);
+
+    // In PostList.jsx
     useEffect(() => {
         if (status === 'idle') {
-            dispatch(fetchPosts(searchParam));
+            dispatch(fetchPosts({subreddit: selectedSubreddit, searchTerm: ''}));
         }
-    }, [status, dispatch]);
+    }, [selectedSubreddit, status, dispatch]);
+
 
     // Render posts or loading/error state based on status
     if (status === 'loading') {
@@ -27,12 +32,9 @@ export function BasicList() {
         return <div>Error: {error}</div>;
     }
 
-    console.log('posts', posts);
-
     return (
         <Box sx={{
             width: '100%',
-            // maxWidth: 360,
             bgcolor: 'background.paper'
         }}>
             <List>
@@ -40,7 +42,7 @@ export function BasicList() {
                     <PostItem
                         key={post.id}
                         post={post}
-                        sub={searchParam}
+                        sub={selectedSubreddit}
                     />
                 ))}
             </List>
