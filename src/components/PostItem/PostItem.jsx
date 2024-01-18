@@ -60,7 +60,7 @@ export function MultiActionAreaCard({post}) {
                                     sx={{
                                         cursor: 'pointer',
                                         '&:hover': {
-                                            color: 'green',
+                                            color: userAction !== 'increased' ? 'green' : 'grey'
                                         },
                                         color: userAction === 'increased' ? 'grey' : 'inherit'
                                     }}
@@ -79,7 +79,7 @@ export function MultiActionAreaCard({post}) {
                                     sx={{
                                         cursor: 'pointer',
                                         '&:hover': {
-                                            color: 'red',
+                                            color: userAction !== 'decreased' ? 'red' : 'grey'
                                         },
                                         color: userAction === 'decreased' ? 'grey' : 'inherit'
                                     }}
