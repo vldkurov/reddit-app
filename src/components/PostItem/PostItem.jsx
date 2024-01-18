@@ -66,12 +66,6 @@ export function MultiActionAreaCard({post}) {
                                     }}
                                 />
                             </Box>
-                            {/*<ArrowUpwardIcon onClick={handleIncreaseScore} sx={{*/}
-                            {/*    cursor: 'pointer',*/}
-                            {/*    '&:hover': {*/}
-                            {/*        color: 'green',*/}
-                            {/*    },*/}
-                            {/*}}/>*/}
                             <Typography component="div">{displayScore}</Typography>
                             <Box disabled={userAction === 'decreased'}>
                                 <ArrowDownwardIcon
@@ -85,12 +79,6 @@ export function MultiActionAreaCard({post}) {
                                     }}
                                 />
                             </Box>
-                            {/*<ArrowDownwardIcon onClick={handleDecreaseScore} sx={{*/}
-                            {/*    cursor: 'pointer',*/}
-                            {/*    '&:hover': {*/}
-                            {/*        color: 'red',*/}
-                            {/*    },*/}
-                            {/*}}/>*/}
                         </Box>
                     </Grid>
                     <Grid item xs sx={{}}>

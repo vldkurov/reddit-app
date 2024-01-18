@@ -18,11 +18,6 @@ export function CommentsComponent({subreddit, postId}) {
     // Sort comments by 'created_utc' in descending order (newest first)
     const sortedComments = comments ? comments.slice().sort((a, b) => b.created_utc - a.created_utc) : [];
 
-    // useEffect(() => {
-    //     if (isActive && commentsStatus === 'idle') {
-    //         dispatch(fetchComments({subreddit, postId}));
-    //     }
-    // }, [subreddit, postId, commentsStatus, dispatch, isActive]);
 
     useEffect(() => {
         if (isActive && commentsStatus === 'idle') {

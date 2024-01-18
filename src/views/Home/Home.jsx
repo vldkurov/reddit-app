@@ -4,23 +4,6 @@ import FilterOptions from "../../components/FilterOptions/FilterOptions";
 import Box from "@mui/material/Box";
 
 
-// function Home() {
-//     return (
-//         <Container maxWidth='100%' sx={{paddingTop: 2}}>
-//             <Grid container spacing={1} sx={{flexGrow: 1}}>
-//                 <Grid item sm={9} xs={12}>
-//                     <PostList/>
-//                 </Grid>
-//                 <Grid item sm={3} xs={12}>
-//                     <Box sx={{position: 'fixed', width: '24%', top: '14%', zIndex: 1000}}>
-//                         <FilterOptions/>
-//                     </Box>
-//                 </Grid>
-//             </Grid>
-//         </Container>
-//     );
-// }
-
 // xs, extra-small: 0px
 // sm, small: 600px
 // md, medium: 900px
