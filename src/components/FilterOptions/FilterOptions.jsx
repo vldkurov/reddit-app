@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {MenuItem, Select} from '@mui/material';
 import {fetchPosts, setSelectedSubreddit} from "../../features/redditSlice";
 
@@ -7,6 +7,7 @@ const predefinedSubreddits = ['Home', 'AskReddit', 'facepalm', 'gaming', 'NoStup
 
 export default function FilterOptions() {
     const dispatch = useDispatch();
+    const selectedSubreddit = useSelector(state => state.reddit.selectedSubreddit);
 
     const handleSubredditChange = (event) => {
         dispatch(setSelectedSubreddit(event.target.value));
@@ -15,7 +16,12 @@ export default function FilterOptions() {
 
 
     return (
-        <Select defaultValue="Home" onChange={handleSubredditChange} sx={{width: 1}}>
+        <Select
+            defaultValue="Home"
+            value={selectedSubreddit}
+            onChange={handleSubredditChange}
+            sx={{width: 1}}
+        >
             {predefinedSubreddits.map(subreddit => (
                 <MenuItem key={subreddit} value={subreddit}>{subreddit}</MenuItem>
             ))}

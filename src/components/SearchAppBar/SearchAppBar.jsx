@@ -9,7 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import RedditIcon from '@mui/icons-material/Reddit';
 import {useDispatch} from "react-redux";
-import {fetchPosts} from "../../features/redditSlice";
+import {fetchPosts, setSelectedSubreddit} from "../../features/redditSlice";
 import {IconButton} from "@mui/material";
 
 const logo = 'RedditMinimal'
@@ -56,6 +56,8 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
+const Offset = styled('div')(({theme}) => theme.mixins.toolbar);
+
 export default function SearchAppBar() {
     const [input, setInput] = useState('');
     const dispatch = useDispatch();
@@ -66,10 +68,16 @@ export default function SearchAppBar() {
         setInput('')
     };
 
+    const handleRedditIconClick = () => {
+        // Dispatch fetchPosts with the default subreddit
+        dispatch(setSelectedSubreddit('Home'));
+        dispatch(fetchPosts({subreddit: 'Home', searchTerm: ''}));
+    };
+
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="fixed" sx={{bgcolor: '#e91e63'}}>
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -77,8 +85,8 @@ export default function SearchAppBar() {
                         color="inherit"
                         aria-label="open drawer"
                         sx={{mr: 0.5}}
+                        onClick={handleRedditIconClick} // Add the click handler
                     >
-                        {/*<MenuIcon/>*/}
                         <RedditIcon color="white" fontSize="large"/>
                     </IconButton>
                     <Typography
@@ -104,6 +112,7 @@ export default function SearchAppBar() {
                     </Box>
                 </Toolbar>
             </AppBar>
+            <Offset/>
         </Box>
     );
 }

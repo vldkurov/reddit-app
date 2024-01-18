@@ -1,6 +1,7 @@
 import {BasicList as PostList} from "../../components/PostList/PostList";
 import {Container, Grid} from "@mui/material";
 import FilterOptions from "../../components/FilterOptions/FilterOptions";
+import Box from "@mui/material/Box";
 
 
 function Home() {
@@ -11,7 +12,9 @@ function Home() {
                     <PostList/>
                 </Grid>
                 <Grid item xs={3}>
-                    <FilterOptions/>
+                    <Box sx={{position: 'fixed', width: '24%', top: '14%', zIndex: 1000}}>
+                        <FilterOptions/>
+                    </Box>
                 </Grid>
             </Grid>
         </Container>
