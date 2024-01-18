@@ -21,6 +21,12 @@ import Box from "@mui/material/Box";
 //     );
 // }
 
+// xs, extra-small: 0px
+// sm, small: 600px
+// md, medium: 900px
+// lg, large: 1200px
+// xl, extra-large: 1536px
+
 function Home() {
     return (
         <Container maxWidth='100%' sx={{paddingTop: 2}}>
@@ -34,9 +40,9 @@ function Home() {
                       }}>
                     <Box
                         sx={{
-                            position: {xs: 'static', sm: 'fixed'},
+                            position: {xs: 'static', sm: 'fixed', md: 'fixed'},
                             width: {xs: 1, sm: '23%'},
-                            top: {sm: '12%'},
+                            top: {sm: '12%', md: '19%'},
                             zIndex: 1000
                         }}
                     >
