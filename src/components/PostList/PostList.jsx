@@ -35,7 +35,7 @@ export function BasicList() {
             width: '100%',
             bgcolor: 'background.paper'
         }}>
-            <List>
+            <List sx={{py: 0}}>
                 {sortedPosts.map(post => (
                     <PostItem
                         key={post.id}

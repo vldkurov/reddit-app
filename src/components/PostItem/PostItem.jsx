@@ -48,8 +48,8 @@ export function MultiActionAreaCard({post}) {
     };
 
     return (
-        <ListItem>
-            <Card sx={{width: '100%', padding: 2}}>
+        <ListItem sx={{p: 0, mb: 1}}>
+            <Card sx={{width: '100%', padding: 1}}>
                 <Grid container columnSpacing={1}>
                     <Grid item xs="auto" sx={{}}>
                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
