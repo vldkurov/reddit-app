@@ -34,15 +34,12 @@ function Home() {
                 <Grid item sm={3} xs={12}
                       sx={{
                           mb: 1,
-                          // borderStyle: 'solid',
-                          // borderWidth: '1px',
-                          // borderColor: 'red',
                       }}>
                     <Box
                         sx={{
                             position: {xs: 'static', sm: 'fixed', md: 'fixed'},
                             width: {xs: 1, sm: '23%'},
-                            top: {sm: '25%', md: '11%'},
+                            top: {sm: '25%', md: '11.2%'},
                             zIndex: 1000
                         }}
                     >
