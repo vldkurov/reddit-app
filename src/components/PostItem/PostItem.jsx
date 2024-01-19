@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CommentIcon from '@mui/icons-material/Comment';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import {Button, CardActionArea, CardActions, CardMedia, Grid, ListItem} from '@mui/material';
+import {CardActionArea, CardMedia, Grid, ListItem} from '@mui/material';
 import getHoursAgo from "../../helpers/timeAgoCalculator";
 import formatScore from "../../helpers/formatScore";
 import {CommentsComponent as DetailedPostView} from "../DetailedPostView/DetailedPostView";
@@ -93,27 +93,25 @@ export function MultiActionAreaCard({post}) {
                                 sx={{borderRadius: 3}}
                             />}
                             <CardContent sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Box sx={{
+                                    display: 'block',
+                                }}>
+                                    <Typography variant="body1" component="div"
+                                                sx={{color: 'text.primary', fontWeight: 'bold'}}>
+                                        {author}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        {hoursAgo} hours ago
+                                    </Typography>
+                                </Box>
                                 <Typography variant="body1" component="div"
-                                            sx={{color: 'text.primary', fontWeight: 'bold'}}>
-                                    {author}
-                                </Typography>
-                                <Typography variant="body1" component="div">
-                                    {hoursAgo} hours ago
-                                </Typography>
-                                <Typography variant="body1" component="div" sx={{display: 'flex'}}
                                             onClick={handleIconClick}>
                                     <CommentIcon color={isActive ? 'primary' : 'action'} fontSize="large"/>
                                     {num_comments}
                                 </Typography>
-
                             </CardContent>
                         </CardActionArea>
                         {isActive && <DetailedPostView postId={id} subreddit={subreddit}/>}
-                        <CardActions>
-                            <Button size="small" color="primary">
-                                Share
-                            </Button>
-                        </CardActions>
                     </Grid>
                 </Grid>
 
