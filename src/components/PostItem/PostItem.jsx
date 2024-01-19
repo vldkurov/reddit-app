@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import CommentIcon from '@mui/icons-material/Comment';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import {CardActionArea, CardMedia, Grid, ListItem} from '@mui/material';
+import {CardActionArea, CardMedia, Grid, IconButton, ListItem} from '@mui/material';
 import getHoursAgo from "../../helpers/timeAgoCalculator";
 import formatScore from "../../helpers/formatScore";
 import {CommentsComponent as DetailedPostView} from "../DetailedPostView/DetailedPostView";
@@ -51,37 +51,51 @@ export function MultiActionAreaCard({post}) {
         <ListItem sx={{p: 0, mb: 1}}>
             <Card sx={{width: '100%', padding: 1}}>
                 <Grid container columnSpacing={1}>
-                    <Grid item xs="auto" sx={{}}>
+                    <Grid item xs="auto">
                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <Box disabled={userAction === 'increased'}>
-                                <ArrowUpwardIcon
+                            <Box sx={{
+                                // display: 'flex',
+                                // flexDirection: 'column', // Arrange items vertically
+                                // alignItems: 'center'
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <IconButton
                                     onClick={handleIncreaseScore}
-                                    // style={{ color: userAction === 'increased' ? 'grey' : 'inherit' }}
+                                    disabled={userAction === 'increased'}
                                     sx={{
-                                        cursor: 'pointer',
+                                        cursor: userAction !== 'increased' ? 'pointer' : 'default',
                                         '&:hover': {
-                                            color: userAction !== 'increased' ? 'green' : 'grey'
+                                            bgcolor: userAction !== 'increased' ? 'green' : 'transparent',
+                                            color: userAction !== 'increased' ? 'white' : 'grey', // White color on hover
                                         },
-                                        color: userAction === 'increased' ? 'grey' : 'inherit'
+                                        color: userAction === 'increased' ? 'grey' : 'green',
+                                        m: 1
                                     }}
-                                />
-                            </Box>
-                            <Typography component="div">{displayScore}</Typography>
-                            <Box disabled={userAction === 'decreased'}>
-                                <ArrowDownwardIcon
+                                >
+                                    <ArrowUpwardIcon/>
+                                </IconButton>
+                                <Typography component="div">{displayScore}</Typography>
+                                <IconButton
                                     onClick={handleDecreaseScore}
+                                    disabled={userAction === 'decreased'}
                                     sx={{
-                                        cursor: 'pointer',
+                                        cursor: userAction !== 'decreased' ? 'pointer' : 'default',
                                         '&:hover': {
-                                            color: userAction !== 'decreased' ? 'red' : 'grey'
+                                            bgcolor: userAction !== 'decreased' ? 'red' : 'transparent',
+                                            color: userAction !== 'decreased' ? 'white' : 'grey', // White color on hover
                                         },
-                                        color: userAction === 'decreased' ? 'grey' : 'inherit'
+                                        color: userAction === 'decreased' ? 'grey' : 'red',
+                                        m: 1
                                     }}
-                                />
+                                >
+                                    <ArrowDownwardIcon/>
+                                </IconButton>
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs sx={{}}>
+                    <Grid item xs>
                         <Typography variant="h6" component="div">
                             {title}
                         </Typography>
@@ -114,7 +128,6 @@ export function MultiActionAreaCard({post}) {
                         {isActive && <DetailedPostView postId={id} subreddit={subreddit}/>}
                     </Grid>
                 </Grid>
-
             </Card>
         </ListItem>
     );
