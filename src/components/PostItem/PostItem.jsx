@@ -57,9 +57,6 @@ export function MultiActionAreaCard({post}) {
                                 display: 'flex',
                                 flexDirection: 'column', // Arrange items vertically
                                 alignItems: 'center'
-                                // display: 'flex',
-                                // alignItems: 'center',
-                                // justifyContent: 'center'
                             }}>
                                 <IconButton
                                     onClick={handleIncreaseScore}
