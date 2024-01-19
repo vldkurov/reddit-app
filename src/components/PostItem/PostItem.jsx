@@ -54,12 +54,12 @@ export function MultiActionAreaCard({post}) {
                     <Grid item xs="auto">
                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <Box sx={{
-                                // display: 'flex',
-                                // flexDirection: 'column', // Arrange items vertically
-                                // alignItems: 'center'
                                 display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
+                                flexDirection: 'column', // Arrange items vertically
+                                alignItems: 'center'
+                                // display: 'flex',
+                                // alignItems: 'center',
+                                // justifyContent: 'center'
                             }}>
                                 <IconButton
                                     onClick={handleIncreaseScore}
