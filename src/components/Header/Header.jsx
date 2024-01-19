@@ -1,4 +1,3 @@
-// import AppBar from '@mui/material/AppBar';
 import SearchAppBar from "../SearchAppBar/SearchAppBar";
 
 function Header() {
