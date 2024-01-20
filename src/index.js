@@ -8,6 +8,7 @@ import store from './store';
 import {createTheme, ThemeProvider} from "@mui/material";
 import {orange} from "@mui/material/colors";
 
+
 const theme = createTheme({
     status: {
         danger: orange[500],
